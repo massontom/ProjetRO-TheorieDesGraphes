@@ -13,6 +13,7 @@ L'exemple un graphe à 3 noeuds et montre comment changer leurs positions
 public class Main{
     public static void main(String[] args) throws Exception{
 	
+	/*
 	Graph graph = new SingleGraph("Tutorial 1");
 	graph.addNode("A" );
 	graph.addNode("B" );
@@ -28,6 +29,13 @@ public class Main{
 	graph.addEdge("BC", "B", "C");
 	graph.addEdge("CA", "C", "A");
 	graph.display(false);
+	*/
+
+	uTemp = "MOIS";	
+	GestionBD bd = new GestionBD();
+	GrapheRO graphro = new GrapheRO(bd, uTemp);
+	bd.deconnexion();
+	graphro.afficher();
 
 	// Ce qui suis était un test, ne plus l'utiliser
 	

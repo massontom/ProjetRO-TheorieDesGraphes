@@ -12,19 +12,19 @@ les points frontières représentent les frontières de l'unité spatiale choisi
 */
 
 public class GrapheRO{
-	// A modifier : creer des classes paramTemp et paramSpat
-	private String paramTemp;
-	private String paramSpat;
+	private UniteTemporelle uTemp
+	private GestionBD bd;
 	private List<Point> frontieres;
 	private List<Point> positions;
 	
-	public void GrapheRO(String uTemp, String uSpat){
-		paramTemp = uTemp;
-		paramSpat = uSpat;
-
-		// A modifier : creer les bonnes requetes pour aller chercher les bonnes infos
+	public void GrapheRO(GestionBD bd, UniteTemporelle uTemp){
+		this.bd = bd;
+		this.uTemp = uTemp;
 		frontieres = new ArrayList<Point>();
 		positions = new ArrayList<Point>();
+		this.bd.creerVue(this.uTemp);
+		frontieres = this.bd.obtenirPointsFrontiere();
+		positions = this.bd.obtenirPointsLocalisation();
 	}
 	
 	/* A coder : création de 1 graphes à partir des 2 listes de points
@@ -36,6 +36,7 @@ public class GrapheRO{
 
 
 
+	// Ne plus utiliser les méthodes setFrontieres et grapheFrontiere: c'était des tests pour afficher la ligne de commande de MM. On peut s'inspirer de grapheFrontiere pour la méthode afficher().
 	/*
 	public void setFrontieres(List<Point> frontiere){
 		frontieres = frontiere;
@@ -55,6 +56,7 @@ public class GrapheRO{
 		}
 	return graph;
 	}
+	
 	*/
 	public String toString(){
 		StringBuilder str = new StringBuilder();

@@ -8,10 +8,12 @@ import java.util.List;
 
 public class TestGestionBD{
     public static void main(String[] args)  throws Exception {
+	/*	
 	GestionBD bd = new GestionBD();
 	List<Point> lpoints = new ArrayList<Point>();
 	lpoints = bd.obtenirTableEssai();
 	bd.deconnexion();
 	System.out.println(lpoints.toString());	
+	*/
     } 
 }
