@@ -3,6 +3,16 @@
 classes
 # Log file
 *.log
+
+#Tex files
+*.aux
+*.fdb_latexmk
+*.fls
+*.lof
+*.out
+*.synctex.gz
+*.toc
+
 *.DS_Store
 # BlueJ files
 *.ctxt
