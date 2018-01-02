@@ -3,7 +3,7 @@ import org.graphstream.graph.implementations.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List; 
-
+import unite.UniteTemp;
 
 /* Main du projet.
 L'exemple un graphe à 3 noeuds et montre comment changer leurs positions
@@ -31,10 +31,12 @@ public class Main{
 	graph.display(false);
 	*/
 
-	uTemp = "MOIS";	
+	UniteTemp uTemp = UniteTemp.MOIS;	
 	GestionBD bd = new GestionBD();
 	GrapheRO graphro = new GrapheRO(bd, uTemp);
-	bd.deconnexion();
+	//GrapheRO graphro = new GrapheRO();
+	
+	
 	graphro.afficher();
 
 	// Ce qui suis était un test, ne plus l'utiliser

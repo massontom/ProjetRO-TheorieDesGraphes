@@ -7,7 +7,7 @@ import java.util.List;
 public class Point{
 	private Float X;
 	private Float Y;
-	
+
 	public Point(){
 	X =new Float(0);
 	Y =new Float(0);
@@ -17,14 +17,14 @@ public class Point{
 	Y =new Float(y);
 	}
 
-	/* Constructeur utilisé pour transformer une ligne de la bd de forme "POINT(x y)" en objet de classe point. 
+	/* Constructeur utilisé pour transformer une ligne de la bd de forme "POINT(x y)" en objet de classe point.
 	*/
 	public Point(String point){
 	String[] coord;
 	String regex = new String("[\\(\\)\\s]");
 	coord = point.split(regex);
 	X = new Float(coord[1]);
-	Y = new Float(coord[2]);	
+	Y = new Float(coord[2]);
 	}
 
 	public float getX(){
@@ -44,8 +44,6 @@ public class Point{
 	}
 
 	public String toString(){
-	return X.toString() + " " + Y.toString();
+	return "(" + X.toString() + " , " + Y.toString()+")";
 }
-}	
-	
-	 
+}
