@@ -2,6 +2,8 @@ package com.ro.graph;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.StringBuilder;
+import java.lang.Exception;
+import java.sql.SQLException;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 /* Classe permettant de manipuler ce que l'on veux afficher
@@ -17,7 +19,7 @@ public class CustomGraph{
 	private List<Point> frontieres;
 	private List<Point> positions;
 
-	public void CustomGraph(GestionBD bd, UniteTemporelle uTemp, UniteSpatiale uSpat){
+	public void CustomGraph(GestionBD bd, UniteTemporelle uTemp, UniteSpatiale uSpat) throws SQLException {
 		this.bd = bd;
 		this.uTemp = uTemp;
 		this.uSpat = uSpat;
@@ -32,7 +34,31 @@ public class CustomGraph{
 	S'inspirer de grapheFrontiere() mais le généraliser pour que les 2 listes de points soient traitées. Gerer aussi le style du graphe dans cette partie (ajouter des arretes, gerer le css du graphe pour différencier à l'affichage les points frontières des points d'information).
 	*/
 	public void afficher(){
-
+		Graph graph = new MultiGraph("Graphe test");
+		graph.addAttribute("ui.stylesheet", "edge {fill-color: blue; fill-mode: dyn-plain;}"+"node {fill-color: blue, red; fill-mode: dyn-plain;}");
+		Integer compteur=0;
+		String nodeName;
+		for (Point pt : frontieres) {
+			compteur = compteur+1;
+			nodeName=compteur.toString();
+			graph.addNode(nodeName);
+			graph.getNode(nodeName).setAttribute("xy",pt.getX(),pt.getY());
+			graph.getNode(nodeName).addAttribute("ui.color",0);
+			if(compteur>1) {
+					Integer j=compteur-1;
+					String previousNodeName = j.toString();
+					String edgeName = previousNodeName + " to " + nodeName;
+					graph.addEdge(edgeName, previousNodeName, nodeName);
+			}
+		}
+		for (Point pt : positions) {
+							compteur = compteur+1;
+							nodeName = compteur.toString();
+							graph.addNode(nodeName);
+							graph.getNode(nodeName).setAttribute("xy",pt.getX(),pt.getY());
+							graph.getNode(nodeName).addAttribute("ui.color",1);
+		}
+		graph.display();
 	}
 
 

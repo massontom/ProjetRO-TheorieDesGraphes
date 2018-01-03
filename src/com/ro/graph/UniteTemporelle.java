@@ -4,4 +4,4 @@ public enum UniteTemporelle {
   JOUR,
   HEURE,
   MINUTE;
-}
+};

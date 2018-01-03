@@ -40,19 +40,19 @@ public void creerVue(UniteTemporelle uTemp, UniteSpatiale uSpat){ //a completer 
 	public String genererRequete(UniteTemporelle uTemp) throws SQLException{
     String requete;
     switch (uTemp){
-      case UniteTemporelle.MOIS:
+      case MOIS:
         requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
         break;
 
-      case UniteTemporelle.JOUR:
+      case JOUR:
         requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
-      case UniteTemporelle.HEURE:
+      case HEURE:
         requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
-      case UniteTemporelle.MINUTE:
+      case MINUTE:
         requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
