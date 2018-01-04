@@ -39,6 +39,15 @@ public String genererRequete(UniteTemp uTemp) throws SQLException {
         case MOIS:
                 requete = requete + "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
                 break;
+	case JOUR:
+                requete = requete + "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
+                break;
+case HEURE:
+                requete = requete + "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
+                break;
+case MINUTE:
+                requete = requete + "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
+                break;
         default:
                 requete = "";
         }
@@ -66,8 +75,10 @@ public List<Point> obtenirPointsLocalisation() throws SQLException {
                 nomsCol.add(nomCol);
                 types.add(metaData.getColumnClassName(i));
         }
+	res.next();
         while (res.next()) {
                 for (i=1; i<=nbCol; i++) {
+			
                         point = res.getObject(nomsCol.get(i-1)).toString();
                         lpoints.add(new Point(point));
                 }
@@ -106,7 +117,7 @@ public List<Point> obtenirPointsFrontiere() throws SQLException {
                         lpoints.add(new Point(point));
                 }
         }
-
+	lpoints.add(new Point()); //ajout du séparateur entre les frontières
         res = st.executeQuery("select ST_AsText((ST_DumpPoints(ST_Multi(ST_union (spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\";");
         metaData = res.getMetaData();
 
