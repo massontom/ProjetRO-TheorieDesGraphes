@@ -36,22 +36,22 @@ public class GestionBD {
   }
 
   public String genererRequete(UniteTemporelle uTemp) throws SQLException {
-    String requete;
+    String requete = "Create or replace view Points as ";
     switch (uTemp) {
     case MOIS:
-      requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
+      requete += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
     case JOUR:
-      requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
+      requete += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
     case HEURE:
-      requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
+      requete += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
     case MINUTE:
-      requete = "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
+      requete += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
       break;
 
     default:
@@ -69,7 +69,7 @@ public class GestionBD {
 
     ResultSet res = st.executeQuery("select distinct(ST_AsText(location)) from Points;");
     ResultSetMetaData metaData = res.getMetaData();
-    String point = "";
+    String point;
 
     List<String> types = new ArrayList<String>();
     List<String> nomsCol = new ArrayList<String>();
@@ -81,6 +81,7 @@ public class GestionBD {
       nomsCol.add(nomCol);
       types.add(metaData.getColumnClassName(i));
     }
+    System.out.println(res == null);
     while (res.next()) {
       for (i = 1; i <= nbCol; i++) {
         point = res.getObject(nomsCol.get(i - 1)).toString();
@@ -93,7 +94,7 @@ public class GestionBD {
   }
 
   public List<Point> obtenirPointsFrontiere() throws SQLException {
-    Integer i;
+    int i;
 
     List<Point> lpoints = new ArrayList<Point>();
 
@@ -107,7 +108,7 @@ public class GestionBD {
 
     List<String> types = new ArrayList<String>();
     List<String> nomsCol = new ArrayList<String>();
-    Integer nbCol = metaData.getColumnCount();
+    int nbCol = metaData.getColumnCount();
 
     for (i = 1; i <= nbCol; i++) {
       nomCol = metaData.getColumnLabel(i);
