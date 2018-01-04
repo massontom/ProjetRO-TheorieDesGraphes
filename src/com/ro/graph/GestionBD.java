@@ -81,7 +81,6 @@ public class GestionBD {
       nomsCol.add(nomCol);
       types.add(metaData.getColumnClassName(i));
     }
-    System.out.println(res == null);
     while (res.next()) {
       for (i = 1; i <= nbCol; i++) {
         point = res.getObject(nomsCol.get(i - 1)).toString();
@@ -94,21 +93,21 @@ public class GestionBD {
   }
 
   public List<Point> obtenirPointsFrontiere() throws SQLException {
-    int i;
+    Integer i;
 
     List<Point> lpoints = new ArrayList<Point>();
 
     Statement st = conn.createStatement();
     String point = "";
     String nomCol;
-    // DEPARTEMENTS
+
     ResultSet res = st.executeQuery(
         "select  ST_AsText((ST_DumpPoints(ST_Multi(ST_union (spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
     ResultSetMetaData metaData = res.getMetaData();
 
     List<String> types = new ArrayList<String>();
     List<String> nomsCol = new ArrayList<String>();
-    int nbCol = metaData.getColumnCount();
+    Integer nbCol = metaData.getColumnCount();
 
     for (i = 1; i <= nbCol; i++) {
       nomCol = metaData.getColumnLabel(i);
@@ -121,28 +120,26 @@ public class GestionBD {
         lpoints.add(new Point(point));
       }
     }
+    lpoints.add(new Point()); //ajout du séparateur entre les frontières
+    res = st.executeQuery(
+        "select ST_AsText((ST_DumpPoints(ST_Multi(ST_union (spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\";");
+    metaData = res.getMetaData();
 
-    /**
-    //COMMUNES
-    ResultSet res = st.executeQuery("select ST_AsText((ST_DumpPoints(ST_Multi(ST_union (spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\";");
-    ResultSetMetaData metaData = res.getMetaData();
+    types = new ArrayList<String>();
+    nomsCol = new ArrayList<String>();
+    nbCol = metaData.getColumnCount();
 
-     List<String> types = new ArrayList<String>();
-    List<String> nomsCol = new ArrayList<String>();
-    Integer nbCol = metaData.getColumnCount();
-
-
-    for (i=1;i<=nbCol;i++){
-        nomCol = metaData.getColumnLabel(i);
-        nomsCol.add(nomCol);
-        types.add(metaData.getColumnClassName(i));
+    for (i = 1; i <= nbCol; i++) {
+      nomCol = metaData.getColumnLabel(i);
+      nomsCol.add(nomCol);
+      types.add(metaData.getColumnClassName(i));
     }
-    while (res.next()){
-         for (i=1;i<=nbCol;i++){
-     point = res.getObject(nomsCol.get(i-1)).toString();
-     lpoints.add(new Point(point));
-     }
-    }**/
+    while (res.next()) {
+      for (i = 1; i <= nbCol; i++) {
+        point = res.getObject(nomsCol.get(i - 1)).toString();
+        lpoints.add(new Point(point));
+      }
+    }
 
     st.close();
     return lpoints;

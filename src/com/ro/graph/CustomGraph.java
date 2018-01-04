@@ -27,39 +27,50 @@ public class CustomGraph {
 		positions = new ArrayList<Point>();
 		this.bd.creerVue(this.uTemp, this.uSpat);
 		frontieres = this.bd.obtenirPointsFrontiere();
-		positions = this.bd.obtenirPointsLocalisation();
+		//positions = this.bd.obtenirPointsLocalisation();
 	}
 
 	/* A coder : création de 1 graphes à partir des 2 listes de points
 	S'inspirer de grapheFrontiere() mais le généraliser pour que les 2 listes de points soient traitées. Gerer aussi le style du graphe dans cette partie (ajouter des arretes, gerer le css du graphe pour différencier à l'affichage les points frontières des points d'information).
 	*/
 	public void afficher() {
-		Graph graph = new MultiGraph("Graphe test");
+		Graph graph = new MultiGraph("Graphes des frontieres/positions");
 		graph.addAttribute("ui.stylesheet",
-				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node {fill-color: blue, red; fill-mode: dyn-plain;}");
-		Integer compteur = 0;
-		String nodeName;
+				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
+		Integer i = 0;
+		String nomNoeud;
+		Integer indicateurChangementFrontiere = 0;
 		for (Point pt : frontieres) {
-			compteur = compteur + 1;
-			nodeName = compteur.toString();
-			graph.addNode(nodeName);
-			graph.getNode(nodeName).setAttribute("xy", pt.getX(), pt.getY());
-			graph.getNode(nodeName).addAttribute("ui.color", 0);
-			if (compteur > 1) {
-				Integer j = compteur - 1;
-				String previousNodeName = j.toString();
-				String edgeName = previousNodeName + " to " + nodeName;
-				graph.addEdge(edgeName, previousNodeName, nodeName);
+			if (!(pt.getX() == 0 && pt.getY() == 0)) {
+				indicateurChangementFrontiere++;
+				i = i + 1;
+				nomNoeud = i.toString() + "frontiere";
+				//System.out.println("noeud"+i.toString());
+				graph.addNode(nomNoeud);
+				graph.getNode(nomNoeud).setAttribute("xy", pt.getX(), pt.getY());
+				graph.getNode(nomNoeud).addAttribute("ui.color", 0);
+				graph.getNode(nomNoeud).addAttribute("ui.style", "size : 0.5px;");
+				if (indicateurChangementFrontiere > 1) {
+					Integer j = i - 1;
+					String nomNoeudPrecedent = j.toString() + "frontiere";
+					//System.out.println("noeud précédent"+j.toString());
+					String nomSegment = nomNoeudPrecedent + " à " + nomNoeud;
+					//System.out.println("arrete "+nomSegment);
+					graph.addEdge(nomSegment, nomNoeudPrecedent, nomNoeud);
+				}
+			} else {
+				indicateurChangementFrontiere = 0;
 			}
 		}
 		for (Point pt : positions) {
-			compteur = compteur + 1;
-			nodeName = compteur.toString();
-			graph.addNode(nodeName);
-			graph.getNode(nodeName).setAttribute("xy", pt.getX(), pt.getY());
-			graph.getNode(nodeName).addAttribute("ui.color", 1);
+			i = i + 1;
+			nomNoeud = i.toString() + "position";
+			graph.addNode(nomNoeud);
+			graph.getNode(nomNoeud).setAttribute("xy", pt.getX(), pt.getY());
+			graph.getNode(nomNoeud).addAttribute("ui.color", 1);
+			graph.getNode(nomNoeud).addAttribute("ui.style", "size : 4px;");
 		}
-		graph.display();
+		graph.display(false);
 	}
 
 	// Ne plus utiliser les méthodes setFrontieres et grapheFrontiere: c'était des tests pour afficher la ligne de commande de MM. On peut s'inspirer de grapheFrontiere pour la méthode afficher().
