@@ -19,7 +19,7 @@ public class CustomGraph{
 	private List<Point> frontieres;
 	private List<Point> positions;
 
-	public void CustomGraph(GestionBD bd, UniteTemporelle uTemp, UniteSpatiale uSpat) throws SQLException {
+	public CustomGraph(GestionBD bd, UniteTemporelle uTemp, UniteSpatiale uSpat) throws SQLException {
 		this.bd = bd;
 		this.uTemp = uTemp;
 		this.uSpat = uSpat;
