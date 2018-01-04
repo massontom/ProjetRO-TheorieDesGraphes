@@ -32,32 +32,43 @@ public GrapheRO(GestionBD bd, UniteTemp uTemp) throws SQLException {
    S'inspirer de grapheFrontiere() mais le généraliser pour que les 2 listes de points soient traitées. Gerer aussi le style du graphe dans cette partie (ajouter des arretes, gerer le css du graphe pour différencier à l'affichage les points frontières des points d'information).
  */
 public void afficher(){
+
 					Graph graph = new MultiGraph("Graphes des frontieres/positions");
-					graph.addAttribute("ui.stylesheet", "edge {fill-color: blue; fill-mode: dyn-plain;}"+"node {fill-color: blue, red; fill-mode: dyn-plain;}");
+					graph.addAttribute("ui.stylesheet", "edge {fill-color: blue; fill-mode: dyn-plain;}"+"node{fill-color: blue, red; fill-mode: dyn-plain;}");
 					Integer i=0;
 					String nomNoeud;
-					for (Point pt : frontieres) {
+					Integer indicateurChangementFrontiere=0;
+					for (Point pt : frontieres) { if (!(pt.getX()==0 && pt.getY()==0)){
+										indicateurChangementFrontiere++;
 										i = i+1;
-										nomNoeud = i.toString();
+										nomNoeud = i.toString()+"frontiere";
+//System.out.println("noeud"+i.toString());
 										graph.addNode(nomNoeud);
 										graph.getNode(nomNoeud).setAttribute("xy",pt.getX(),pt.getY());
 										graph.getNode(nomNoeud).addAttribute("ui.color",0);
-										if(i>1) {
+										graph.getNode(nomNoeud).addAttribute("ui.style", "size : 0.5px;");
+										if(indicateurChangementFrontiere>1) {
 															Integer j=i-1;
-															String nomNoeudPrecedent = j.toString();
-															String nomSegment = nomNoeudPrecedent+" à "+nomNoeud;
+															String nomNoeudPrecedent = j.toString()+"frontiere";
+				//System.out.println("noeud précédent"+j.toString());											
+String nomSegment = nomNoeudPrecedent+" à "+nomNoeud;
+				//System.out.println("arrete "+nomSegment);
 															graph.addEdge(nomSegment,nomNoeudPrecedent,nomNoeud);
 										}
+						} else { 
+indicateurChangementFrontiere=0; }
 					}
 					for (Point pt : positions) {
 										i = i+1;
-										nomNoeud = i.toString();
+										nomNoeud = i.toString()+"position";
 										graph.addNode(nomNoeud);
 										graph.getNode(nomNoeud).setAttribute("xy",pt.getX(),pt.getY());
 										graph.getNode(nomNoeud).addAttribute("ui.color",1);
+										graph.getNode(nomNoeud).addAttribute("ui.style", "size : 4px;");
 					}
-					graph.display();
-}
+					graph.display(false);
+//System.out.println("on sort du graphe display");
+}		
 
 
 
