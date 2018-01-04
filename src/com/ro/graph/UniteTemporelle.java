@@ -1,7 +1,4 @@
-package com.ro.graph;
+
 public enum UniteTemporelle {
-  MOIS,
-  JOUR,
-  HEURE,
-  MINUTE;
+  MOIS, JOUR, HEURE, MINUTE;
 };

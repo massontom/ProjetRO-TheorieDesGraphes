@@ -1,4 +1,4 @@
-package com.ro.graph;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.StringBuilder;
@@ -12,7 +12,7 @@ les points frontières représentent les frontières de l'unité spatiale choisi
 
 */
 
-public class CustomGraph{
+public class CustomGraph {
 	private UniteTemporelle uTemp;
 	private UniteSpatiale uSpat;
 	private GestionBD bd;
@@ -33,35 +33,34 @@ public class CustomGraph{
 	/* A coder : création de 1 graphes à partir des 2 listes de points
 	S'inspirer de grapheFrontiere() mais le généraliser pour que les 2 listes de points soient traitées. Gerer aussi le style du graphe dans cette partie (ajouter des arretes, gerer le css du graphe pour différencier à l'affichage les points frontières des points d'information).
 	*/
-	public void afficher(){
+	public void afficher() {
 		Graph graph = new MultiGraph("Graphe test");
-		graph.addAttribute("ui.stylesheet", "edge {fill-color: blue; fill-mode: dyn-plain;}"+"node {fill-color: blue, red; fill-mode: dyn-plain;}");
-		Integer compteur=0;
+		graph.addAttribute("ui.stylesheet",
+				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node {fill-color: blue, red; fill-mode: dyn-plain;}");
+		Integer compteur = 0;
 		String nodeName;
 		for (Point pt : frontieres) {
-			compteur = compteur+1;
-			nodeName=compteur.toString();
+			compteur = compteur + 1;
+			nodeName = compteur.toString();
 			graph.addNode(nodeName);
-			graph.getNode(nodeName).setAttribute("xy",pt.getX(),pt.getY());
-			graph.getNode(nodeName).addAttribute("ui.color",0);
-			if(compteur>1) {
-					Integer j=compteur-1;
-					String previousNodeName = j.toString();
-					String edgeName = previousNodeName + " to " + nodeName;
-					graph.addEdge(edgeName, previousNodeName, nodeName);
+			graph.getNode(nodeName).setAttribute("xy", pt.getX(), pt.getY());
+			graph.getNode(nodeName).addAttribute("ui.color", 0);
+			if (compteur > 1) {
+				Integer j = compteur - 1;
+				String previousNodeName = j.toString();
+				String edgeName = previousNodeName + " to " + nodeName;
+				graph.addEdge(edgeName, previousNodeName, nodeName);
 			}
 		}
 		for (Point pt : positions) {
-							compteur = compteur+1;
-							nodeName = compteur.toString();
-							graph.addNode(nodeName);
-							graph.getNode(nodeName).setAttribute("xy",pt.getX(),pt.getY());
-							graph.getNode(nodeName).addAttribute("ui.color",1);
+			compteur = compteur + 1;
+			nodeName = compteur.toString();
+			graph.addNode(nodeName);
+			graph.getNode(nodeName).setAttribute("xy", pt.getX(), pt.getY());
+			graph.getNode(nodeName).addAttribute("ui.color", 1);
 		}
 		graph.display();
 	}
-
-
 
 	// Ne plus utiliser les méthodes setFrontieres et grapheFrontiere: c'était des tests pour afficher la ligne de commande de MM. On peut s'inspirer de grapheFrontiere pour la méthode afficher().
 	/*
@@ -85,7 +84,7 @@ public class CustomGraph{
 	}
 
 	*/
-	public String toString(){
+	public String toString() {
 		StringBuilder str = new StringBuilder();
 		str.append("Unité temporelle : ");
 		str.append(uTemp);
@@ -95,16 +94,16 @@ public class CustomGraph{
 		str.append("\n");
 		str.append("frontières : ");
 		str.append("\n");
-		for (Point pt : frontieres){
+		for (Point pt : frontieres) {
 			str.append(pt.toString());
 		}
 
 		str.append("\n");
 		str.append("positions : ");
 		str.append("\n");
-		for (Point pt : positions){
+		for (Point pt : positions) {
 			str.append(pt.toString());
 		}
-	return str.toString();
+		return str.toString();
 	}
 }
