@@ -35,8 +35,7 @@ public class CustomGraph {
 	*/
 	public void afficher() {
 		Graph graph = new MultiGraph("Graphes des frontieres/positions");
-		graph.addAttribute("ui.stylesheet",
-				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
+		graph.addAttribute("ui.stylesheet","edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
 		Integer i = 0;
 		String nomNoeud;
 		Integer indicateurChangementFrontiere = 0;
