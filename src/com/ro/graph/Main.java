@@ -53,7 +53,7 @@ public class Main {
         break;
       }
     } while (choix != 9);
-
+    sc.close();
     System.out.println(String.format("Vos choix sont : %s, %s", uTemp, uSpat));
 
     CustomGraph customGraph = new CustomGraph(bd, uTemp, uSpat);
