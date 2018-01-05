@@ -11,6 +11,7 @@ public class Main {
     GestionBD bd = new GestionBD();
     Scanner sc = new Scanner(System.in); //test menus
     int choix;
+    boolean loop = true;
 
     do {
       System.out.println("---Choix de l'unité spatiale ---");
@@ -21,16 +22,18 @@ public class Main {
       switch (choix) {
       case 1:
         uSpat = UniteSpatiale.COMMUNES;
-        break;
+        loop = false;
       case 2:
         uSpat = UniteSpatiale.DEPARTEMENTS;
-        break;
+        loop = false;
+      case 9:
+        loop = false;
       default:
         System.out.println("Veuillez faire un choix");
       }
-    } while (choix != 9);
+    } while (loop);
 
-    choix = 0;
+    loop = true;
 
     do {
       System.out.println("---Choix de l'unité temporelle---");
@@ -43,20 +46,22 @@ public class Main {
       switch (choix) {
       case 1:
         uTemp = UniteTemporelle.MOIS;
-        break;
+        loop = false;
       case 2:
         uTemp = UniteTemporelle.JOUR;
-        break;
+        loop = false;
       case 3:
         uTemp = UniteTemporelle.HEURE;
-        break;
+        loop = false;
       case 4:
         uTemp = UniteTemporelle.MINUTE;
-        break;
+        loop = false;
+      case 9:
+        loop = false;
       default:
         System.out.println("Veuillez faire un choix");
       }
-    } while (choix != 9);
+    } while (loop);
     sc.close();
     System.out.println(String.format("Vos choix sont : %s, %s", uTemp, uSpat));
 
