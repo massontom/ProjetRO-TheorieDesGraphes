@@ -22,7 +22,7 @@ public class GestionBD {
 
   public void deconnexion() throws SQLException {
     this.conn.close();
-    System.out.println("Disconnected from the BD");
+    System.out.println("Disconnected from BD");
   }
 
   public void creerVue(UniteTemporelle uTemp, UniteSpatiale uSpat) { //a completer pour uspat
