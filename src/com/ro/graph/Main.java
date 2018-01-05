@@ -9,7 +9,7 @@ public class Main {
     UniteTemporelle uTemp = UniteTemporelle.MOIS;
     UniteSpatiale uSpat = UniteSpatiale.DEPARTEMENTS;
     GestionBD bd = new GestionBD();
-    Scanner sc = new Scanner(System.in); //test menus
+    Scanner sc = new Scanner(System.in);
     int choix;
     boolean loop = true;
 
@@ -17,17 +17,18 @@ public class Main {
       System.out.println("---Choix de l'unité spatiale ---");
       System.out.println("Par communes : tapez 1");
       System.out.println("Par départements : tapez 2");
-      System.out.println("quitter : tapez 9");
       choix = sc.nextInt();
       switch (choix) {
       case 1:
         uSpat = UniteSpatiale.COMMUNES;
+        System.out.println("com");
         loop = false;
+        break;
       case 2:
         uSpat = UniteSpatiale.DEPARTEMENTS;
+        System.out.println("dpt");
         loop = false;
-      case 9:
-        loop = false;
+        break;
       default:
         System.out.println("Veuillez faire un choix");
       }
@@ -41,27 +42,33 @@ public class Main {
       System.out.println("Par jour : tapez 2");
       System.out.println("Par heure : tapez 3");
       System.out.println("Par minute : tapez 4");
-      System.out.println("quitter : tapez 9");
       choix = sc.nextInt();
       switch (choix) {
       case 1:
         uTemp = UniteTemporelle.MOIS;
+        System.out.println("mois");
         loop = false;
+        break;
       case 2:
         uTemp = UniteTemporelle.JOUR;
+        System.out.println("jour");
         loop = false;
+        break;
       case 3:
         uTemp = UniteTemporelle.HEURE;
+        System.out.println("heure");
         loop = false;
+        break;
       case 4:
         uTemp = UniteTemporelle.MINUTE;
+        System.out.println("minute");
         loop = false;
-      case 9:
-        loop = false;
+        break;
       default:
         System.out.println("Veuillez faire un choix");
       }
     } while (loop);
+
     sc.close();
     System.out.println(String.format("Vos choix sont : %s, %s", uTemp, uSpat));
 
