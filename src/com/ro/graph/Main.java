@@ -25,6 +25,8 @@ public class Main {
       case 2:
         uSpat = UniteSpatiale.DEPARTEMENTS;
         break;
+      default:
+        System.out.println("Veuillez faire un choix");
       }
     } while (choix != 9);
 
@@ -51,6 +53,8 @@ public class Main {
       case 4:
         uTemp = UniteTemporelle.MINUTE;
         break;
+      default:
+        System.out.println("Veuillez faire un choix");
       }
     } while (choix != 9);
     sc.close();
