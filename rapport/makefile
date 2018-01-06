@@ -10,7 +10,6 @@ $(PDF) : rapport
 clean :
 	rm -rf *.log
 	rm -rf *.aux
-	rm -rf *.pdf
 	rm -rf *.toc
 	rm -rf *.out
 	rm -rf *.backup
