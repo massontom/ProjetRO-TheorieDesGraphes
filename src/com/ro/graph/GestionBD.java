@@ -62,101 +62,135 @@ public class GestionBD {
   }
 
   public List<Point> obtenirPointsLocalisation() throws SQLException {
-        Integer i;
-
-        List<Point> lpoints = new ArrayList<Point>();
-        Statement st = conn.createStatement();
-
-        ResultSet res = st.executeQuery("select distinct(ST_AsText(location)) from Points;");
-        ResultSetMetaData metaData = res.getMetaData();
-        String point = "";
-
-        List<String> types = new ArrayList<String>();
-        List<String> nomsCol = new ArrayList<String>();
-        Integer nbCol = metaData.getColumnCount();
-        String nomCol;
-
-        for (i=1; i<=nbCol; i++) {
-                nomCol = metaData.getColumnLabel(i);
-                nomsCol.add(nomCol);
-                types.add(metaData.getColumnClassName(i));
-        }
-	res.next();
-        while (res.next()) {
-                for (i=1; i<=nbCol; i++) {
-			
-                        point = res.getObject(nomsCol.get(i-1)).toString();
-                        lpoints.add(new Point(point));
-                }
-        }
-
-        st.close();
-        return lpoints;
-}
-
-  public List<Point> obtenirPointsFrontiere() throws SQLException {
     Integer i;
 
-        List<Point> lpoints = new ArrayList<Point>();
+    List<Point> lpoints = new ArrayList<Point>();
+    Statement st = conn.createStatement();
 
-        Statement st = conn.createStatement();
-        String point = "";
-        String nomCol;
+    ResultSet res = st.executeQuery("select distinct(ST_AsText(location)) from Points;");
+    ResultSetMetaData metaData = res.getMetaData();
+    String point = "";
 
-        ResultSet res = st.executeQuery("select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
-        ResultSetMetaData metaData = res.getMetaData();
+    List<String> types = new ArrayList<String>();
+    List<String> nomsCol = new ArrayList<String>();
+    Integer nbCol = metaData.getColumnCount();
+    String nomCol;
 
-        List<String> types = new ArrayList<String>();
-        List<String> nomsCol = new ArrayList<String>();
-        Integer nbCol = metaData.getColumnCount();
+    for (i = 1; i <= nbCol; i++) {
+      nomCol = metaData.getColumnLabel(i);
+      nomsCol.add(nomCol);
+      types.add(metaData.getColumnClassName(i));
+    }
+    res.next();
+    while (res.next()) {
+      for (i = 1; i <= nbCol; i++) {
 
+        point = res.getObject(nomsCol.get(i - 1)).toString();
+        lpoints.add(new Point(point));
+      }
+    }
 
-        for (i=1; i<=nbCol; i++) {
-                nomCol = metaData.getColumnLabel(i);
-                nomsCol.add(nomCol);
-                types.add(metaData.getColumnClassName(i));
+    st.close();
+    return lpoints;
+  }
+
+  public List<Point> obtenirPointsFrontiere(UniteSpatiale uSpat) throws SQLException {
+    List<Point> frontieres = new ArrayList<Point>();
+    if (uSpat == UniteSpatiale.DEPARTEMENTS) {
+      frontieres = requeteDepartement();
+    } else if (uSpat == UniteSpatiale.COMMUNES) {
+      frontieres = requeteCommune();
+    }
+    return frontieres;
+  }
+
+  private List<Point> requeteDepartement() throws SQLException {
+
+    List<Point> frontiereDpt = new ArrayList<Point>();
+    Integer i;
+    Statement st = conn.createStatement();
+    String point = "";
+    String nomCol;
+    ResultSet res;
+    ResultSetMetaData metaData;
+    List<String> types = new ArrayList<String>();
+    List<String> nomsCol = new ArrayList<String>();
+    Integer nbCol;
+
+    res = st.executeQuery(
+        "select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
+    metaData = res.getMetaData();
+    nbCol = metaData.getColumnCount();
+    for (i = 1; i <= nbCol; i++) {
+      nomCol = metaData.getColumnLabel(i);
+      nomsCol.add(nomCol);
+      types.add(metaData.getColumnClassName(i));
+    }
+    while (res.next()) {
+      for (i = 1; i <= nbCol; i++) {
+        point = res.getObject(nomsCol.get(i - 1)).toString();
+        frontiereDpt.add(new Point(point));
+      }
+    }
+
+    return frontiereDpt;
+  }
+
+  private List<Point> requeteCommune() throws SQLException {
+    List<Point> frontiereCommunes = new ArrayList<Point>();
+    Integer i;
+    Statement st = conn.createStatement();
+    String point = "";
+    String nomCol;
+    ResultSet res;
+    ResultSetMetaData metaData;
+    List<String> types = new ArrayList<String>();
+    List<String> nomsCol = new ArrayList<String>();
+    Integer nbCol;
+
+    res = st.executeQuery(
+        "select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
+    metaData = res.getMetaData();
+    nbCol = metaData.getColumnCount();
+    for (i = 1; i <= nbCol; i++) {
+      nomCol = metaData.getColumnLabel(i);
+      nomsCol.add(nomCol);
+      types.add(metaData.getColumnClassName(i));
+    }
+    while (res.next()) {
+      for (i = 1; i <= nbCol; i++) {
+        point = res.getObject(nomsCol.get(i - 1)).toString();
+        frontiereCommunes.add(new Point(point));
+      }
+    }
+    frontiereCommunes.add(new Point());
+
+    res = st.executeQuery(
+        "select \"codeInsee\"::int, ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\" order by \"codeInsee\";");
+    metaData = res.getMetaData();
+    nbCol = metaData.getColumnCount();
+    for (i = 1; i <= nbCol; i++) {
+      nomCol = metaData.getColumnLabel(i);
+      nomsCol.add(nomCol);
+      types.add(metaData.getColumnClassName(i));
+    }
+    Integer old = new Integer(0);
+    Integer nouveau = new Integer(0);
+    while (res.next()) {
+      for (i = 1; i <= nbCol; i++) {
+        if (types.get(i - 1).equals("java.lang.Integer")) {
+          old = nouveau;
+          nouveau = res.getInt(nomsCol.get(i - 1));
+          if ((nouveau - old) != 0) {
+            frontiereCommunes.add(new Point());
+          }
+        } else {
+          point = res.getObject(nomsCol.get(i - 1)).toString();
+          frontiereCommunes.add(new Point(point));
         }
-        while (res.next()) {
-                for (i=1; i<=nbCol; i++) {
-                        point = res.getObject(nomsCol.get(i-1)).toString();
-                        lpoints.add(new Point(point));
-                }
-        }
-	lpoints.add(new Point());
-        res = st.executeQuery("select \"codeInsee\"::int, ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\" order by \"codeInsee\";");
-        metaData = res.getMetaData();
+      }
+    }
 
-        types = new ArrayList<String>();
-        nomsCol = new ArrayList<String>();
-        nbCol = metaData.getColumnCount();
-
-
-        for (i=1; i<=nbCol; i++) {
-                nomCol = metaData.getColumnLabel(i);
-                nomsCol.add(nomCol);
-                types.add(metaData.getColumnClassName(i));
-        }
-	
-	Integer old=new Integer(0);
-	Integer nouveau=new Integer(0);
-
-        while (res.next()) {
-                for (i=1; i<=nbCol; i++) {
-			if (types.get(i-1).equals("java.lang.Integer")){
-				old = nouveau;
-      				nouveau = res.getInt(nomsCol.get(i-1));
-				if ((nouveau-old)!=0){
-					lpoints.add(new Point());
-					}
-        			}
-    			else {
-        			point = res.getObject(nomsCol.get(i-1)).toString();
-                        	lpoints.add(new Point(point));
-                	}
-        	}
-	}
-
-        st.close();
-        return lpoints;
+    return frontiereCommunes;
   }
 }

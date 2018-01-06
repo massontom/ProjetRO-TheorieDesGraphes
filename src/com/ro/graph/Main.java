@@ -14,7 +14,7 @@ public class Main {
     boolean loop = true;
 
     do {
-      System.out.println("---Choix de l'unité spatiale ---");
+      System.out.println("---Choix de la plus petite unité spatiale ---");
       System.out.println("Par communes : tapez 1");
       System.out.println("Par départements : tapez 2");
       choix = sc.nextInt();

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
-
 public class CustomGraph {
 	private UniteTemporelle uTemp;
 	private UniteSpatiale uSpat;
@@ -22,13 +21,14 @@ public class CustomGraph {
 		frontieres = new ArrayList<Point>();
 		positions = new ArrayList<Point>();
 		this.bd.creerVue(this.uTemp, this.uSpat);
-		this.frontieres = bd.obtenirPointsFrontiere();
+		this.frontieres = bd.obtenirPointsFrontiere(uSpat);
 		this.positions = bd.obtenirPointsLocalisation();
 	}
 
 	public void afficher() {
 		Graph graph = new MultiGraph("Graphes des frontieres/positions");
-		graph.addAttribute("ui.stylesheet","edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
+		graph.addAttribute("ui.stylesheet",
+				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
 		Integer i = 0;
 		String nomNoeud;
 		Integer indicateurChangementFrontiere = 0;
@@ -62,7 +62,6 @@ public class CustomGraph {
 		graph.display(false);
 	}
 
-	
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		str.append("Unité temporelle : ");
