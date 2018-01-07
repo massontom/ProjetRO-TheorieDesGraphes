@@ -1,3 +1,6 @@
 \chapter{Analyse volumetrique}
-La base de données grtt14 se compose de près de 30000 tuples (258577 exactement).
-Pour pouvoir traiter ces données il a fallut mettre au point des requêtes permettant de trié l'information. En effet on ne pouvait pas, à l'aide de requête simple faire du "Picsou Magazine" pour obtenir ce qu'on voulait. 
+
+Grâce à la commande \begin{verbatim}
+  select count(*) from spatialisation;
+\end{verbatim} nous pouvons voir que la table spatialisation de la base de donnée grtt14 comporte 258577 tuples exactement. \\
+Pour traiter ces données avec la plus grande efficacité, nous avons créé une vue "Points" qui extrait de la table spatialisation les données en fonction des paramètres souhaités.

@@ -26,62 +26,40 @@ public class CustomGraph {
 	}
 
 	public void afficher() {
-		Graph graph = new MultiGraph("Graphes des frontieres/positions");
+		Graph graph = new MultiGraph("spatialisation grtt14");
 		graph.addAttribute("ui.stylesheet",
 				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");
 		Integer i = 0;
-		String nomNoeud;
-		Integer indicateurChangementFrontiere = 0;
+		String noeud;
+		Integer changementFrontiere = 0;
 		for (Point pt : frontieres) {
 			if (!(pt.getX() == 0 && pt.getY() == 0)) {
-				indicateurChangementFrontiere++;
+				changementFrontiere++;
 				i = i + 1;
-				nomNoeud = i.toString() + "frontiere";
-				graph.addNode(nomNoeud);
-				graph.getNode(nomNoeud).setAttribute("xy", pt.getX(), pt.getY());
-				graph.getNode(nomNoeud).addAttribute("ui.color", 0);
-				graph.getNode(nomNoeud).addAttribute("ui.style", "size : 0.5px;");
-				if (indicateurChangementFrontiere > 1) {
+				noeud = i.toString() + "frontiere";
+				graph.addNode(noeud);
+				graph.getNode(noeud).setAttribute("xy", pt.getX(), pt.getY());
+				graph.getNode(noeud).addAttribute("ui.color", 0);
+				graph.getNode(noeud).addAttribute("ui.style", "size : 0.5px;");
+				if (changementFrontiere > 1) {
 					Integer j = i - 1;
-					String nomNoeudPrecedent = j.toString() + "frontiere";
-					String nomSegment = nomNoeudPrecedent + " à " + nomNoeud;
-					graph.addEdge(nomSegment, nomNoeudPrecedent, nomNoeud);
+					String noeudPrecedent = j.toString() + "frontiere";
+					String nomSegment = noeudPrecedent + " à " + noeud;
+					graph.addEdge(nomSegment, noeudPrecedent, noeud);
 				}
 			} else {
-				indicateurChangementFrontiere = 0;
+				changementFrontiere = 0;
 			}
 		}
 		for (Point pt : positions) {
 			i = i + 1;
-			nomNoeud = i.toString() + "position";
-			graph.addNode(nomNoeud);
-			graph.getNode(nomNoeud).setAttribute("xy", pt.getX(), pt.getY());
-			graph.getNode(nomNoeud).addAttribute("ui.color", 1);
-			graph.getNode(nomNoeud).addAttribute("ui.style", "size : 4px;");
+			noeud = i.toString() + "position";
+			graph.addNode(noeud);
+			graph.getNode(noeud).setAttribute("xy", pt.getX(), pt.getY());
+			graph.getNode(noeud).addAttribute("ui.color", 1);
+			graph.getNode(noeud).addAttribute("ui.style", "size : 4px;");
 		}
 		graph.display(false);
 	}
 
-	public String toString() {
-		StringBuilder str = new StringBuilder();
-		str.append("Unité temporelle : ");
-		str.append(uTemp);
-		str.append("\n");
-		str.append("Unité Spatiale : ");
-		str.append(uSpat);
-		str.append("\n");
-		str.append("frontières : ");
-		str.append("\n");
-		for (Point pt : frontieres) {
-			str.append(pt.toString());
-		}
-
-		str.append("\n");
-		str.append("positions : ");
-		str.append("\n");
-		for (Point pt : positions) {
-			str.append(pt.toString());
-		}
-		return str.toString();
-	}
 }
