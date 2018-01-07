@@ -5,8 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.StringBuilder;
 
+/**
+* Classe Database qui sert à se connecter et effectuer des requetes sur la base orange-14
+*/
+
 public class Database {
   private Connection conn;
+
+  /**
+  * Constructeur de la classe
+  */
 
   public Database() {
     try {
@@ -20,10 +28,20 @@ public class Database {
     }
   }
 
+  /**
+  * Méthode logout() permet de se déconnecter de la base
+  */
+
   public void logout() throws SQLException {
     this.conn.close();
     System.out.println("Disconnected from BD");
   }
+
+  /**
+  * Méthode createView(UniteTemporelle uTemp)
+  * appelle la méthode getRequest qui va permettre de créer la vue Points (vue qui sort les points en fonction du paramaètre temporel)
+  * @param UniteTemporelle
+  */
 
   public void createView(UniteTemporelle uTemp) {
     try {
@@ -34,31 +52,42 @@ public class Database {
     }
   }
 
+  /**
+  * Méthode getRequest(UniteTemporelle uTemp)
+  * méthode qui retourne la requete en fonction du paramaètre temporel définie par l'utilisateur (MOIS, JOUR, HEURE, MINUTE)
+  * @param UniteTemporelle
+  */
+
   public String getRequest(UniteTemporelle uTemp) throws SQLException {
     String request = "Create or replace view Points as ";
     switch (uTemp) {
-      case MINUTE:
-        request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
-        break;
+    case MINUTE:
+      request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date), extract(minute from date) order by date) from spatialisation) as foo where row_number=1);";
+      break;
 
-      case HEURE:
-        request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
-        break;
+    case HEURE:
+      request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date), extract(day from date), extract(hour from date) order by date) from spatialisation) as foo where row_number=1);";
+      break;
 
-      case JOUR:
-        request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
-        break;
+    case JOUR:
+      request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(day from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
+      break;
 
-      case MOIS:
-        request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
-        break;
+    case MOIS:
+      request += "select * from spatialisation where date in (select date from (select date, row_number() over(partition by extract(year from date), extract(month from date) order by date) from spatialisation) as foo where row_number=1);";
+      break;
 
-      default:
-        request = "";
+    default:
+      request = "";
     }
     return request;
 
   }
+
+  /**
+  * Méthode getPointsLocalisation()
+  * @@return les points de la trace de localisation
+  */
 
   public List<Point> getPointsLocalisation() throws SQLException {
     Integer i;
@@ -90,6 +119,12 @@ public class Database {
     return pointsList;
   }
 
+  /**
+  * Méthode getPointsFrontiere(UniteSpatiale uSpat)
+  * @param UniteSpatiale
+  * @return la liste des points représentant les frontières des zones géo en fonction du paramètre spatial
+  */
+
   public List<Point> getPointsFrontiere(UniteSpatiale uSpat) throws SQLException {
     List<Point> frontieres = new ArrayList<Point>();
     if (uSpat == UniteSpatiale.DEPARTEMENTS) {
@@ -99,6 +134,11 @@ public class Database {
     }
     return frontieres;
   }
+
+  /**
+  * Méthode getCommunes()
+  * @return la liste des points représentant les frontières des communes + départements
+  */
 
   private List<Point> getCommunes() throws SQLException {
     List<Point> frontiereCommunes = new ArrayList<Point>();
@@ -112,7 +152,8 @@ public class Database {
     List<String> colNames = new ArrayList<String>();
     Integer nbCol;
 
-    resultSet = st.executeQuery("select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
+    resultSet = st.executeQuery(
+        "select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
     metaData = resultSet.getMetaData();
     nbCol = metaData.getColumnCount();
     for (i = 1; i <= nbCol; i++) {
@@ -128,7 +169,8 @@ public class Database {
     }
     frontiereCommunes.add(new Point());
 
-    resultSet = st.executeQuery("select \"codeInsee\"::int, ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\" order by \"codeInsee\";");
+    resultSet = st.executeQuery(
+        "select \"codeInsee\"::int, ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeInsee\" in (select distinct(\"idCommune\") from Points) group by \"codeInsee\" order by \"codeInsee\";");
     metaData = resultSet.getMetaData();
     nbCol = metaData.getColumnCount();
     for (i = 1; i <= nbCol; i++) {
@@ -156,6 +198,11 @@ public class Database {
     return frontiereCommunes;
   }
 
+  /**
+  * Méthode getDepartements()
+  * @return la liste des points représentant les frontières des départements
+  */
+
   private List<Point> getDepartements() throws SQLException {
     List<Point> frontiereDpt = new ArrayList<Point>();
     Integer i;
@@ -168,7 +215,8 @@ public class Database {
     List<String> colNames = new ArrayList<String>();
     Integer nbCol;
 
-    resultSet = st.executeQuery("select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
+    resultSet = st.executeQuery(
+        "select  ST_AsText((ST_DumpPoints(ST_Multi(ST_Union(spatialrepresentation)))).geom) from communes where \"codeDepartement\" in (select distinct(\"idDepartement\") from Points) group by \"codeDepartement\";");
     metaData = resultSet.getMetaData();
     nbCol = metaData.getColumnCount();
     for (i = 1; i <= nbCol; i++) {
