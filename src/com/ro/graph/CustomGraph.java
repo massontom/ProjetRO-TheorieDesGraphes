@@ -25,7 +25,7 @@ public class CustomGraph {
 		this.positions = bd.getPointsLocalisation();
 	}
 
-	public void afficher() {
+	public void display() {
 		Graph graph = new MultiGraph("spatialisation grtt14");
 		graph.addAttribute("ui.stylesheet",
 				"edge {fill-color: blue; fill-mode: dyn-plain;}" + "node{fill-color: blue, red; fill-mode: dyn-plain;}");

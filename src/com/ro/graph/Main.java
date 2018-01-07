@@ -73,7 +73,7 @@ public class Main {
     System.out.println(String.format("Vos choix sont : %s, %s", uTemp, uSpat));
 
     CustomGraph customGraph = new CustomGraph(bd, uTemp, uSpat);
-    customGraph.afficher();
+    customGraph.display();
     bd.logout();
   }
 }
