@@ -10,6 +10,7 @@ Il se compose des classes CustomGraph, Database et Point, deux énumérations Un
   et une méthode toString().
 \subsection{Database}
  La classe Database dispose d'un constructeur qui permet une connexion à notre base de données, une méthode logout() pour se déconnecter, une méthode createView() qui permet de créer ou remplacer une vue à partir d'une UniteTemporelle et une UniteSpatiale elle utilise la méthode getRequest() qui va générer une requête suivant l'UniteTemporelle et renverra la requête SQL associée.
+ La méthode getCommunes() qui permet de retourner la liste des points représentant les frontières des communes et départements. La méthode getDepartements() retourne la liste des points représentant les frontières des départements.
  Et les deux dernières méthodes getPointsLocalisation() et getPointsFrontiere() permettant d'obtenir respectivement les points de la localisation et des villes et frontières et de les stocker dans une collection.
 \subsection{Point}
 Cette classe permet simplement de créé un point avec des coordonnées x et y utilisé par la suite dans les classes CustomGraph et Database.
@@ -17,6 +18,7 @@ Cette classe permet simplement de créé un point avec des coordonnées x et y u
  L'énumération UniteTemporelle est composée de MOIS, JOUR, HEURE, MINUTE et l'énumération UniteSpatiale est composée de COMMUNES et DEPARTEMENTS.
 \subsection{Main}
   Notre Main qui lance le programme est composé d'un menu qui permet de choisir les paramètres voulus et enfin fait appel à la méthode display() de CustomGraph afin de construire et afficher le graphe demandé.
+\newpage
   \section{Diagramme de classes}
   \vfill
   \begin{figure}[ht!]
