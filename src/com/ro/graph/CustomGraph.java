@@ -10,19 +10,19 @@ import org.graphstream.graph.implementations.*;
 public class CustomGraph {
 	private UniteTemporelle uTemp;
 	private UniteSpatiale uSpat;
-	private GestionBD bd;
+	private Database bd;
 	private List<Point> frontieres;
 	private List<Point> positions;
 
-	public CustomGraph(GestionBD bd, UniteTemporelle uTemp, UniteSpatiale uSpat) throws SQLException {
+	public CustomGraph(Database bd, UniteTemporelle uTemp, UniteSpatiale uSpat) throws SQLException {
 		this.bd = bd;
 		this.uTemp = uTemp;
 		this.uSpat = uSpat;
 		frontieres = new ArrayList<Point>();
 		positions = new ArrayList<Point>();
-		this.bd.creerVue(this.uTemp, this.uSpat);
-		this.frontieres = bd.obtenirPointsFrontiere(uSpat);
-		this.positions = bd.obtenirPointsLocalisation();
+		this.bd.createView(this.uTemp, this.uSpat);
+		this.frontieres = bd.getPointsFrontiere(uSpat);
+		this.positions = bd.getPointsLocalisation();
 	}
 
 	public void afficher() {

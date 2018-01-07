@@ -8,7 +8,7 @@ public class Main {
   public static void main(String[] args) throws Exception {
     UniteTemporelle uTemp = UniteTemporelle.MOIS;
     UniteSpatiale uSpat = UniteSpatiale.DEPARTEMENTS;
-    GestionBD bd = new GestionBD();
+    Database bd = new Database();
     Scanner sc = new Scanner(System.in);
     int choix;
     boolean loop = true;
@@ -74,6 +74,6 @@ public class Main {
 
     CustomGraph customGraph = new CustomGraph(bd, uTemp, uSpat);
     customGraph.afficher();
-    bd.deconnexion();
+    bd.logout();
   }
 }
