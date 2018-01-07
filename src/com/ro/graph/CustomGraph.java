@@ -20,7 +20,7 @@ public class CustomGraph {
 		this.uSpat = uSpat;
 		frontieres = new ArrayList<Point>();
 		positions = new ArrayList<Point>();
-		this.bd.createView(this.uTemp, this.uSpat);
+		this.bd.createView(this.uTemp);
 		this.frontieres = bd.getPointsFrontiere(uSpat);
 		this.positions = bd.getPointsLocalisation();
 	}
