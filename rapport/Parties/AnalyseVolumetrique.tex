@@ -1,6 +1,14 @@
 \chapter{Analyse volumetrique}
 
-Grâce à la commande \begin{verbatim}
+Grâce à la requête
+\begin{verbatim}
   select count(*) from spatialisation;
-\end{verbatim} nous pouvons voir que la table spatialisation de la base de donnée orange-14 comporte 258577 tuples exactement. \\
-Pour traiter ces données avec la plus grande efficacité, nous avons créé une vue "Points" qui extrait de la table spatialisation les données en fonction des paramètres souhaités.
+\end{verbatim}
+nous pouvons voir que la table spatialisation de la base de donnée orange-14 comporte 258577 tuples. exactement. \\
+À l'aide la requête
+\begin{verbatim}
+  select count(distinct location) from spatialisation;
+\end{verbatim}
+nous pouvons voir que nous avons 2156 points de localisation différents, et donc que de nombreuses positions sont identiques dans la base. Cela s'explique par le fait que les points sont relevés avec un intervalle de 10 secondes, et que la personne est immobile parfois (la nuit par exemple).
+
+Pour traiter ces données avec la plus grande efficacité, nous avons créé une vue "Points" qui extrait de la table spatialisation les données en fonction des paramètres temporel souhaité.
